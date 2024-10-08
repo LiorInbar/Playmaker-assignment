@@ -10,16 +10,22 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.groupingBy;
 
 public  class PlayersControllerImpl {
-    public static GetTopPlayersResponse getTopPlayers(GetTopPlayersRequest request){
-        //mapping each player to the number of games he played
-        Map<String,Long> playerToNumberOfAppearances =
-                request.participatedPlayers().stream()
+
+    //mapping each player to the number of games he played
+    private static Map<String,Long>
+    getPlayerToNumberOfAppearances(GetTopPlayersRequest request){
+        return request.participatedPlayers().stream()
                 .flatMap(l -> l.stream().distinct()) //remove duplicates
                 .collect(groupingBy(Function.identity(),
                         Collectors.counting()));
-
+    }
+    public static GetTopPlayersResponse getTopPlayers(GetTopPlayersRequest request){
+        //mapping each player to the number of games he played
+        Map<String,Long> playerToNumberOfAppearances =
+                getPlayerToNumberOfAppearances(request);
         //getting the top N players
-        List<String> res = playerToNumberOfAppearances.entrySet()
+        List<String> res = playerToNumberOfAppearances
+                .entrySet()
                 .stream()
                 .sorted(Comparator.comparing(player ->
                         -player.getValue()))  //using minus values to get reverse order
