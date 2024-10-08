@@ -23,5 +23,16 @@ public class PlayersControllerTest {
         assertThat(response.mostParticipatedPlayers().size()==2).isTrue();
         assertThat(response.mostParticipatedPlayers().getFirst().equals("Ronaldo")).isTrue();
         assertThat(response.mostParticipatedPlayers().getLast().equals("Shalom")).isTrue();
+
+        GetTopPlayersRequest request2 =
+                new GetTopPlayersRequest(1,
+                        List.of(List.of("Modric", "Neuer" , "Rodri", "Haaland"),
+                                List.of("Haaland" , "Modric", "Haaland"),
+                                List.of("Mbape", "Modric" , "Messi", "Foden")));
+        GetTopPlayersResponse response2 = PlayersControllerImpl.getTopPlayers(request2);
+        assertThat(response2.mostParticipatedPlayers().size()==1).isTrue();
+        assertThat(response2.mostParticipatedPlayers().getFirst().equals("Modric")).isTrue();
+        assertThat(response2.mostParticipatedPlayers().getFirst().equals("Haaland")).isFalse();
+
     }
 }
