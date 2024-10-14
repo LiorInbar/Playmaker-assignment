@@ -1,10 +1,11 @@
-version: '3.8'
-
 services:
   app:
     image: 'playmaker-assignment:latest'
     build:
       context: .
-    container_name: app
     ports:
-      - "8080:8080"
+      - "8090:8090"
+  redis:
+    image: 'redis:7.4.1'
+    ports:
+      - "6379:6379"
