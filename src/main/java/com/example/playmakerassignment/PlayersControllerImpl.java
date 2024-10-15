@@ -2,7 +2,6 @@ package com.example.playmakerassignment;
 
 
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
@@ -25,7 +24,7 @@ public class PlayersControllerImpl {
                         Collectors.counting()));
     }
 
-    private   GetTopPlayersResponse
+    public   GetTopPlayersResponse
     getTopPlayersImpl(GetTopPlayersRequest request){
         //mapping each player to the number of games he played
         Map<String,Long> playerToNumberOfAppearances =
@@ -49,14 +48,4 @@ public class PlayersControllerImpl {
         return getTopPlayersImpl(request);
     }
 
-    public  GetTopPlayersResponse
-    getTopPlayers(GetTopPlayersRequest request){
-        try {
-            return getTopPlayersCached(request);
-        }
-        //if we can't connect to redis, compute regularly
-        catch (RedisConnectionFailureException e){
-            return getTopPlayersImpl(request);
-        }
-    }
 }
