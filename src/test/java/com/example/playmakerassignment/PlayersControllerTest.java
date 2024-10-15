@@ -13,7 +13,7 @@ public class PlayersControllerTest {
 
 
     @Autowired
-    PlayersControllerImpl playersController;
+    PlayersController playersController;
 
 
     @Test
