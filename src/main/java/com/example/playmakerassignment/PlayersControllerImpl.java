@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.groupingBy;
 
 @Component
-public  class PlayersControllerImpl {
+public class PlayersControllerImpl {
 
     //mapping each player to the number of games he played
     private  Map<String,Long>
@@ -43,19 +43,20 @@ public  class PlayersControllerImpl {
         return new GetTopPlayersResponse(res);
     }
 
+    @Cacheable(cacheNames="requests")
+    public GetTopPlayersResponse
+    getTopPlayersCached(GetTopPlayersRequest request) {
+        return getTopPlayersImpl(request);
+    }
+
     public  GetTopPlayersResponse
     getTopPlayers(GetTopPlayersRequest request){
         try {
             return getTopPlayersCached(request);
         }
+        //if we can't connect to redis, compute regularly
         catch (RedisConnectionFailureException e){
             return getTopPlayersImpl(request);
         }
-    }
-
-    @Cacheable(cacheNames="requests")
-    private GetTopPlayersResponse
-    getTopPlayersCached(GetTopPlayersRequest request) {
-        return getTopPlayersImpl(request);
     }
 }
